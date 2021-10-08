@@ -326,6 +326,10 @@ export abstract class ContentItem extends EventEmitter {
     // (undocumented)
     readonly layoutManager: LayoutManager;
     // @internal (undocumented)
+    maxHeight: number;
+    // @internal (undocumented)
+    maxWidth: number;
+    // @internal (undocumented)
     minHeight: number;
     // @internal (undocumented)
     minWidth: number;
@@ -831,6 +835,10 @@ export interface ItemConfig {
     height?: number;
     id?: string;
     isClosable?: boolean;
+    // (undocumented)
+    maxHeight?: number;
+    // (undocumented)
+    maxWidth?: number;
     minHeight?: number;
     minWidth?: number;
     title?: string;
@@ -922,6 +930,10 @@ export namespace LayoutConfig {
         dragProxyHeight?: number;
         dragProxyWidth?: number;
         headerHeight?: number;
+        // (undocumented)
+        maxItemHeight?: number;
+        // (undocumented)
+        maxItemWidth?: number;
         minItemHeight?: number;
         minItemWidth?: number;
     }
@@ -1288,6 +1300,10 @@ export interface ResolvedGroundItemConfig extends ResolvedItemConfig {
     // (undocumented)
     readonly isClosable: false;
     // (undocumented)
+    readonly maxHeight: 0;
+    // (undocumented)
+    readonly maxWidth: 0;
+    // (undocumented)
     readonly minHeight: 0;
     // (undocumented)
     readonly minWidth: 0;
@@ -1352,6 +1368,10 @@ export interface ResolvedItemConfig {
     // (undocumented)
     readonly isClosable: boolean;
     // (undocumented)
+    readonly maxHeight: number;
+    // (undocumented)
+    readonly maxWidth: number;
+    // (undocumented)
     readonly minHeight: number;
     // (undocumented)
     readonly minWidth: number;
@@ -1412,6 +1432,10 @@ export namespace ResolvedLayoutConfig {
         readonly dragProxyWidth: number;
         // (undocumented)
         readonly headerHeight: number;
+        // (undocumented)
+        readonly maxItemHeight: number;
+        // (undocumented)
+        readonly maxItemWidth: number;
         // (undocumented)
         readonly minItemHeight: number;
         // (undocumented)

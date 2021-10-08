@@ -41,9 +41,13 @@ export abstract class ContentItem extends EventEmitter {
     /** @internal */
     minWidth: number; // pixels
     /** @internal */
+    maxWidth: number; // pixels
+    /** @internal */
     height: number; // pixels
     /** @internal */
     minHeight: number; // pixels
+    /** @internal */
+    maxHeight: number; // pixels
 
     isGround: boolean
     isRow: boolean
@@ -97,6 +101,8 @@ export abstract class ContentItem extends EventEmitter {
         this.minWidth = config.minWidth;
         this.height = config.height;
         this.minHeight = config.minHeight;
+        this.maxWidth = config.maxWidth;
+        this.maxHeight = config.maxHeight;
 
         this._isClosable = config.isClosable;
 

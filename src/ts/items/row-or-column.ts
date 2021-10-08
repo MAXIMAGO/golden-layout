@@ -258,8 +258,10 @@ export class RowOrColumn extends ContentItem {
             content: this.calculateConfigContent() as (ResolvedRowOrColumnItemConfig | ResolvedStackItemConfig)[],
             width: this.width,
             minWidth: this.minWidth,
+            maxWidth: this.maxWidth,
             height: this.height,
             minHeight: this.minHeight,
+            maxHeight: this.maxHeight,
             id: this.id,
             isClosable: this.isClosable,
         }
@@ -539,6 +541,18 @@ export class RowOrColumn extends ContentItem {
         };
     }
 
+    private getMaximumDimensions(arr: readonly ContentItem[]) {
+		let maxWidth = 0;
+        let maxHeight = 0;
+
+		for(let i = 0; i < arr.length; ++i) {
+			maxWidth = Math.max(arr[i].maxWidth || 0, maxWidth );
+			maxHeight = Math.max(arr[i].maxHeight || 0, maxHeight);
+		}
+
+		return { horizontal: maxWidth, vertical: maxHeight };
+	}
+
     /**
      * Gets the minimum dimensions for the given item configuration array
      * @internal
@@ -566,6 +580,7 @@ export class RowOrColumn extends ContentItem {
     private onSplitterDragStart(splitter: Splitter) {
         const items = this.getItemsForSplitter(splitter);
         const minSize = this.layoutManager.layoutConfig.dimensions[this._isColumn ? 'minItemHeight' : 'minItemWidth'];
+        // TODO: USE MAXSIZE from dimensions
 
         const beforeMinDim = this.getMinimumDimensions(items.before.contentItems);
         const beforeMinSize = this._isColumn ? beforeMinDim.vertical : beforeMinDim.horizontal;
@@ -573,9 +588,64 @@ export class RowOrColumn extends ContentItem {
         const afterMinDim = this.getMinimumDimensions(items.after.contentItems);
         const afterMinSize = this._isColumn ? afterMinDim.vertical : afterMinDim.horizontal;
 
+        const beforeMaxDim = this.getMaximumDimensions( items.before.contentItems );
+		const beforeMaxSize = this._isColumn ? beforeMaxDim.vertical : beforeMaxDim.horizontal;
+
+		const afterMaxDim = this.getMaximumDimensions( items.after.contentItems );
+		const afterMaxSize = this._isColumn ? afterMaxDim.vertical : afterMaxDim.horizontal;
+
         this._splitterPosition = 0;
         this._splitterMinPosition = -1 * (pixelsToNumber(items.before.element.style[this._dimension]) - (beforeMinSize || minSize));
-        this._splitterMaxPosition = pixelsToNumber(items.after.element.style[this._dimension]) - (afterMinSize || minSize);
+
+        if(beforeMaxSize > 0 && afterMaxSize <= 0) {
+            const beforeRemainingUntilMax = beforeMaxSize - pixelsToNumber(items.before.element.style[this._dimension]);
+            const beforeRemainingUntilMin = pixelsToNumber(items.before.element.style[this._dimension]) - beforeMinSize;
+            // this._splitterMaxPosition = beforeMaxSize - pixelsToNumber(items.before.element.style[this._dimension]);
+
+            this._splitterMinPosition = -1* beforeRemainingUntilMin;
+            this._splitterMaxPosition = beforeRemainingUntilMax;
+        }
+        else if (afterMaxSize > 0 && beforeMaxSize <= 0) {
+            const afterRemainingUntilMax = afterMaxSize - pixelsToNumber(items.after.element.style[this._dimension]);
+            const afterRemainingUntilMin = pixelsToNumber(items.after.element.style[this._dimension]) - afterMinSize;
+
+            this._splitterMinPosition = -1* afterRemainingUntilMax;
+            this._splitterMaxPosition = afterRemainingUntilMin;
+        }
+        else if (beforeMaxSize > 0 && afterMaxSize > 0) {
+            const hasBeforeReachedMax = pixelsToNumber(items.before.element.style[this._dimension]) >= beforeMaxSize;
+            const hasAfterReachedMax = pixelsToNumber(items.after.element.style[this._dimension]) >= afterMaxSize;
+
+            const beforeRemainingUntilMax = beforeMaxSize - pixelsToNumber(items.before.element.style[this._dimension]);
+            const afterRemainingUntilMax = afterMaxSize - pixelsToNumber(items.after.element.style[this._dimension]);
+
+            if(hasBeforeReachedMax && hasAfterReachedMax) {
+                this._splitterMinPosition = 0;
+                this._splitterMaxPosition = 0;
+            }
+
+            if(hasBeforeReachedMax && !hasAfterReachedMax) {
+                this._splitterMinPosition = -1* afterRemainingUntilMax;
+                this._splitterMaxPosition = 0;
+            }
+
+            if(!hasBeforeReachedMax && hasAfterReachedMax) {
+                this._splitterMinPosition = 0;
+                this._splitterMaxPosition = beforeRemainingUntilMax;
+            }
+
+            if(!hasBeforeReachedMax && !hasAfterReachedMax) {
+                const beforeRemainingUntilMin = pixelsToNumber(items.before.element.style[this._dimension]) - beforeMinSize;
+                const afterRemainingUntilMin = pixelsToNumber(items.after.element.style[this._dimension]) - afterMinSize;
+
+                this._splitterMinPosition = -1* Math.min(beforeRemainingUntilMin, afterRemainingUntilMax);
+                this._splitterMaxPosition = Math.min(beforeRemainingUntilMax, afterRemainingUntilMin);
+            }
+        }
+        else {
+            this._splitterMaxPosition = pixelsToNumber(items.after.element.style[this._dimension]) - (afterMinSize || minSize);
+        }
+
     }
 
     /**

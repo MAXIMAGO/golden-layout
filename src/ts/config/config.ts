@@ -36,6 +36,12 @@ export interface ItemConfig {
     minWidth?: number;
 
     /**
+     * The maximum width of this item in pixels
+     * CAUTION - Not tested - do not use
+     */
+    maxWidth?: number;
+
+    /**
      * The height of this item, relative to the other children of its parent in percent
      */
     height?: number;
@@ -45,6 +51,12 @@ export interface ItemConfig {
      * CAUTION - Not tested - do not use
      */
     minHeight?: number;
+
+    /**
+     * The maximum height of this item in pixels
+     * CAUTION - Not tested - do not use
+     */
+    maxHeight?: number;
 
     /**
      * A string that can be used to identify a ContentItem.
@@ -228,8 +240,10 @@ export namespace StackItemConfig {
             content: resolveContent(itemConfig.content),
             width: itemConfig.width ?? ResolvedItemConfig.defaults.width,
             minWidth: itemConfig.minWidth ?? ResolvedItemConfig.defaults.minWidth,
+            maxWidth: itemConfig.maxWidth ?? ResolvedItemConfig.defaults.maxWidth,
             height: itemConfig.height ?? ResolvedItemConfig.defaults.height,
             minHeight: itemConfig.minHeight ?? ResolvedItemConfig.defaults.minHeight,
+            maxHeight: itemConfig.maxHeight ?? ResolvedItemConfig.defaults.maxHeight,
             id,
             maximised,
             isClosable: itemConfig.isClosable ?? ResolvedItemConfig.defaults.isClosable,
@@ -312,8 +326,10 @@ export namespace ComponentItemConfig {
                 content: [],
                 width: itemConfig.width ?? ResolvedItemConfig.defaults.width,
                 minWidth: itemConfig.minWidth ?? ResolvedItemConfig.defaults.minWidth,
+                maxWidth: itemConfig.maxWidth ?? ResolvedItemConfig.defaults.maxWidth,
                 height: itemConfig.height ?? ResolvedItemConfig.defaults.height,
                 minHeight: itemConfig.minHeight ?? ResolvedItemConfig.defaults.minHeight,
+                maxHeight: itemConfig.maxHeight ?? ResolvedItemConfig.defaults.maxHeight,
                 id,
                 maximised,
                 isClosable: itemConfig.isClosable ?? ResolvedItemConfig.defaults.isClosable,
@@ -369,8 +385,10 @@ export namespace RowOrColumnItemConfig {
             content: RowOrColumnItemConfig.resolveContent(itemConfig.content),
             width: itemConfig.width ?? ResolvedItemConfig.defaults.width,
             minWidth: itemConfig.width ?? ResolvedItemConfig.defaults.minWidth,
+            maxWidth: itemConfig.width ?? ResolvedItemConfig.defaults.maxWidth,
             height: itemConfig.height ?? ResolvedItemConfig.defaults.height,
             minHeight: itemConfig.height ?? ResolvedItemConfig.defaults.minHeight,
+            maxHeight: itemConfig.height ?? ResolvedItemConfig.defaults.maxHeight,
             id: ItemConfig.resolveId(itemConfig.id),
             isClosable: itemConfig.isClosable ?? ResolvedItemConfig.defaults.isClosable,
         }
@@ -574,16 +592,28 @@ export namespace LayoutConfig {
         borderGrabWidth?: number,
 
         /**
-         * The minimum height an item can be resized to (in pixel).
-         * Default: 10
-         */
-        minItemHeight?: number;
-
-        /**
          * The minimum width an item can be resized to (in pixel).
          * Default: 10
          */
         minItemWidth?: number;
+
+        /**
+         * The maximum width an item can be resized to (in pixel).
+         * Default: 0
+         */
+        maxItemWidth?: number;
+
+        /**
+         * The minimum height an item can be resized to (in pixel).
+         * Default: 10
+         */
+         minItemHeight?: number;
+
+        /**
+         * The maximum height an item can be resized to (in pixel).
+         * Default: 0
+         */
+         maxItemHeight?: number;
 
         /**
          * The height of the header elements in pixel. This can be changed, but your theme's header css needs to be
@@ -610,8 +640,10 @@ export namespace LayoutConfig {
             const result: ResolvedLayoutConfig.Dimensions = {
                 borderWidth: dimensions?.borderWidth ?? ResolvedLayoutConfig.Dimensions.defaults.borderWidth,
                 borderGrabWidth: dimensions?.borderGrabWidth ?? ResolvedLayoutConfig.Dimensions.defaults.borderGrabWidth,
-                minItemHeight: dimensions?.minItemHeight ?? ResolvedLayoutConfig.Dimensions.defaults.minItemHeight,
                 minItemWidth: dimensions?.minItemWidth ?? ResolvedLayoutConfig.Dimensions.defaults.minItemWidth,
+                maxItemWidth: dimensions?.maxItemWidth ?? ResolvedLayoutConfig.Dimensions.defaults.maxItemWidth,
+                minItemHeight: dimensions?.minItemHeight ?? ResolvedLayoutConfig.Dimensions.defaults.minItemHeight,
+                maxItemHeight: dimensions?.maxItemHeight ?? ResolvedLayoutConfig.Dimensions.defaults.maxItemHeight,
                 headerHeight: dimensions?.headerHeight ?? ResolvedLayoutConfig.Dimensions.defaults.headerHeight,
                 dragProxyWidth: dimensions?.dragProxyWidth ?? ResolvedLayoutConfig.Dimensions.defaults.dragProxyWidth,
                 dragProxyHeight: dimensions?.dragProxyHeight ?? ResolvedLayoutConfig.Dimensions.defaults.dragProxyHeight,

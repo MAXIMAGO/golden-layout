@@ -10,8 +10,10 @@ export interface ResolvedItemConfig {
     readonly content: readonly ResolvedItemConfig[];
     readonly width: number;
     readonly minWidth: number;
+    readonly maxWidth: number;
     readonly height: number;
     readonly minHeight: number;
+    readonly maxHeight: number;
     // id no longer specifies whether an Item is maximised.  This is now done by HeaderItemConfig.maximised
     readonly id: string;
     readonly isClosable: boolean;
@@ -24,8 +26,10 @@ export namespace ResolvedItemConfig {
         content: [],
         width: 50,
         minWidth: 0,
+        maxWidth: 0,
         height: 50,
         minHeight: 0,
+        maxHeight: 0,
         id: '',
         isClosable: true,
     } as const;
@@ -140,8 +144,10 @@ export namespace ResolvedStackItemConfig {
             content: content !== undefined ? copyContent(content) : copyContent(original.content),
             width: original.width,
             minWidth: original.minWidth,
+            maxWidth: original.maxWidth,
             height: original.height,
             minHeight: original.minHeight,
+            maxHeight: original.maxHeight,
             id: original.id,
             maximised: original.maximised,
             isClosable: original.isClosable,
@@ -166,8 +172,10 @@ export namespace ResolvedStackItemConfig {
             content: [],
             width: ResolvedItemConfig.defaults.width,
             minWidth: ResolvedItemConfig.defaults.minWidth,
+            maxWidth: ResolvedItemConfig.defaults.maxWidth,
             height: ResolvedItemConfig.defaults.height,
             minHeight: ResolvedItemConfig.defaults.minHeight,
+            maxHeight: ResolvedItemConfig.defaults.maxHeight,
             id: ResolvedItemConfig.defaults.id,
             maximised: ResolvedHeaderedItemConfig.defaultMaximised,
             isClosable: ResolvedItemConfig.defaults.isClosable,
@@ -211,8 +219,10 @@ export namespace ResolvedComponentItemConfig {
             content: [],
             width: original.width,
             minWidth: original.minWidth,
+            maxWidth: original.maxWidth,
             height: original.height,
             minHeight: original.minHeight,
+            maxHeight: original.maxHeight,
             id: original.id,
             maximised: original.maximised,
             isClosable: original.isClosable,
@@ -231,8 +241,10 @@ export namespace ResolvedComponentItemConfig {
             content: [],
             width: ResolvedItemConfig.defaults.width,
             minWidth: ResolvedItemConfig.defaults.minWidth,
+            maxWidth: ResolvedItemConfig.defaults.maxWidth,
             height: ResolvedItemConfig.defaults.height,
             minHeight: ResolvedItemConfig.defaults.minHeight,
+            maxHeight: ResolvedItemConfig.defaults.maxHeight,
             id: ResolvedItemConfig.defaults.id,
             maximised: ResolvedHeaderedItemConfig.defaultMaximised,
             isClosable: ResolvedItemConfig.defaults.isClosable,
@@ -285,8 +297,10 @@ export namespace ResolvedRowOrColumnItemConfig {
             content: content !== undefined ? copyContent(content) : copyContent(original.content),
             width: original.width,
             minWidth: original.minWidth,
+            maxWidth: original.maxWidth,
             height: original.height,
             minHeight: original.minHeight,
+            maxHeight: original.maxHeight,
             id: original.id,
             isClosable: original.isClosable,
         }
@@ -308,8 +322,10 @@ export namespace ResolvedRowOrColumnItemConfig {
             content: [],
             width: ResolvedItemConfig.defaults.width,
             minWidth: ResolvedItemConfig.defaults.minWidth,
+            maxWidth: ResolvedItemConfig.defaults.maxWidth,
             height: ResolvedItemConfig.defaults.height,
             minHeight: ResolvedItemConfig.defaults.minHeight,
+            maxHeight: ResolvedItemConfig.defaults.maxHeight,
             id: ResolvedItemConfig.defaults.id,
             isClosable: ResolvedItemConfig.defaults.isClosable,
         }
@@ -352,8 +368,10 @@ export interface ResolvedGroundItemConfig extends ResolvedItemConfig {
     readonly type: 'ground';
     readonly width: 100,
     readonly minWidth: 0,
+    readonly maxWidth: 0,
     readonly height: 100,
     readonly minHeight: 0,
+    readonly maxHeight: 0,
     readonly id: '',
     readonly isClosable: false,
     readonly title: '',
@@ -369,8 +387,10 @@ export namespace ResolvedGroundItemConfig {
             content,
             width: 100,
             minWidth: 0,
+            maxWidth: 0,
             height: 100,
             minHeight: 0,
+            maxHeight: 0,
             id: '',
             isClosable: false,
             title: '',
@@ -439,8 +459,10 @@ export namespace ResolvedLayoutConfig {
         // see LayoutConfig.Dimensions for comments
         readonly borderWidth: number;
         readonly borderGrabWidth: number,
-        readonly minItemHeight: number;
         readonly minItemWidth: number;
+        readonly maxItemWidth: number;
+        readonly minItemHeight: number;
+        readonly maxItemHeight: number;
         readonly headerHeight: number;
         readonly dragProxyWidth: number;
         readonly dragProxyHeight: number;
@@ -451,8 +473,10 @@ export namespace ResolvedLayoutConfig {
             return {
                 borderWidth: original.borderWidth,
                 borderGrabWidth: original.borderGrabWidth,
-                minItemHeight: original.minItemHeight,
                 minItemWidth: original.minItemWidth,
+                maxItemWidth: original.maxItemWidth,
+                minItemHeight: original.minItemHeight,
+                maxItemHeight: original.maxItemHeight,
                 headerHeight: original.headerHeight,
                 dragProxyWidth: original.dragProxyWidth,
                 dragProxyHeight: original.dragProxyHeight,
@@ -462,8 +486,10 @@ export namespace ResolvedLayoutConfig {
         export const defaults: ResolvedLayoutConfig.Dimensions = {
             borderWidth: 5,
             borderGrabWidth: 5,
-            minItemHeight: 10,
             minItemWidth: 10,
+            maxItemWidth: 0,
+            minItemHeight: 10,
+            maxItemHeight: 0,
             headerHeight: 20,
             dragProxyWidth: 300,
             dragProxyHeight: 200
